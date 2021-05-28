@@ -1,0 +1,20 @@
+---
+- name: Install speedtest-cli
+  package:
+    name: "speedtest-cli"
+    state: present
+
+- name: Install tmux
+  package:
+    name: "tmux"
+    state: present
+
+- name: Install cmatrix
+  package:
+    name: "cmatrix"
+    state: present
+
+- name: Install tree
+  package:
+    name: "tree"
+    state: present

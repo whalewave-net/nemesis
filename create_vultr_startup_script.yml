@@ -1,0 +1,37 @@
+---
+- name: Creates directory
+  file:
+    path: "/home/vagrant/generated-host-keys/{{ hostname }}"
+    state: directory
+
+- name: Generate an OpenSSH keypair with the default values (4096 bits, rsa)
+  community.crypto.openssh_keypair:
+    path: "/home/vagrant/generated-host-keys/{{ hostname }}/id_rsa"
+
+- name: Set ssh host private and public keys variables
+  set_fact:
+    ssh_host_private_key: "{{ lookup('file', private_key_file_name) }}"
+    ssh_host_public_key: "{{ lookup('file', public_key_file_name) }}"
+
+- name: Grab the ssh CA certificate from vault
+  uri:
+    url: "https://{{ hc_vault_server }}/v1/ssh/public_key"
+    return_content: yes
+  register: vault_ssh_ca_certificate
+
+- name: Grab a signed host certificate from vault
+  uri:
+    url: "https://{{ hc_vault_server }}/v1/ssh/sign/server"
+    headers:
+      X-Vault-Token: "{{ hc_vault_token }}"
+    method: POST
+    body_format: json
+    body: "{ \"public_key\": \"{{ ssh_host_public_key }}\", \"cert_type\": \"host\" }"
+    return_content: yes
+  register: ssh_host_certificate
+  
+- name: Ensure that the script "{{ hostname }}" exist on Vultr
+  ngine_io.vultr.vultr_startup_script:
+    name: "{{ hostname }}"
+    script_type: boot
+    script: "{{ lookup('template', 'templates/startup.sh.j2') }}"

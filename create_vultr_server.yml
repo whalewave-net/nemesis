@@ -1,0 +1,26 @@
+---
+- include_tasks: create_vultr_startup_script.yml
+
+- name: Create a vps named "{{ hostname }}" on Vultr
+  ngine_io.vultr.vultr_server:
+    name: "{{ hostname }}"
+    hostname: "{{ hostname }}"
+    os: Debian 10 x64 (buster)
+    plan: 1024 MB RAM,25 GB SSD,1.00 TB BW
+    startup_script: "{{ hostname }}"
+    region: Amsterdam
+    tag: develop
+    state: present
+  register: vultr_result
+
+- name: Create the A record
+  community.general.cloudflare_dns:
+    zone: "whalewave.net"
+    record: "{{ hostname }}"
+    type: A
+    solo: true
+    value: "{{ vultr_result.vultr_server.v4_main_ip }}"
+    account_email: "{{ account_email }}"
+    account_api_key: "{{ cloudflare_api_key }}"
+    state: present
+  register: record

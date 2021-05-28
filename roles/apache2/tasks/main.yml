@@ -1,0 +1,24 @@
+---
+- name: Install Apache
+  package: 
+    name: apache2 
+    state: latest
+
+- name: Create custom document root
+  file: 
+    path: "{{ doc_root }}"
+    state: directory
+    owner: www-data
+    group: www-data
+
+- name: Set up Apache virtual host file
+  template: src=vhost.tpl dest=/etc/apache2/sites-available/000-default.conf
+  notify: restart apache
+
+- name: Set the default index.html file
+  template:
+    src: index.html.j2
+    dest: "{{ doc_root }}/index.html"
+    owner: www-data
+    group: www-data 
+    mode: 0644
