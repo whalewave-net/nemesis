@@ -31,6 +31,12 @@
     - name: Gather facts for first time
       setup:
 
+    - name: Add shellwhale public key
+      authorized_key:
+        user: "shellwhale"
+        state: present
+        key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDD15zcZ5fttHN7HQ3zjb+x9qWfEbw3reU7TShxAz429y6pRgmB2vqrYqmi/e3ikRC09ESyX+N9WGiH4kW/WPXxOWMsvuADrJJpfBe4nepvmZWe0KnVZ13Rveyh1HyWliUF9TXxox0vcwVIt5mqVhTCsYDrU+tzg2SZtN32p4+REsmPqoExqmQsurGbzY2cz5RU9hxH1uTrxbucuAowMeSVp3jnS399ZjqLlvMQGUH8U8rW1ykMcl+FoEMqmNe0R7oscUhni2ZwHX9c22Z2RspulMX51I/xJqjI0OeStN2HmUKjBUOaKWOQcGlOKg+RjSEy3V6HQOYQrF16oEIxkzV7"
+
     - name: Add motd
       template:
           src: templates/motd.j2
