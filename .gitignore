@@ -1,3 +1,5 @@
 .vagrant
 id_rsa
 generated-keys
+generated-host-keys
+vultr.ini
