@@ -9,12 +9,12 @@
     name: "tmux"
     state: present
 
-- name: Install cmatrix
-  package:
-    name: "cmatrix"
-    state: present
-
 - name: Install tree
   package:
     name: "tree"
+    state: present
+
+- name: Install curl
+  package:
+    name: "curl"
     state: present

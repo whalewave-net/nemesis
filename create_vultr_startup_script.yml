@@ -1,12 +1,12 @@
 ---
 - name: Creates directory
   file:
-    path: "/home/vagrant/generated-host-keys/{{ hostname }}"
+    path: "./generated-host-keys/{{ hostname }}"
     state: directory
 
 - name: Generate an OpenSSH keypair with the default values (4096 bits, rsa)
   community.crypto.openssh_keypair:
-    path: "/home/vagrant/generated-host-keys/{{ hostname }}/id_rsa"
+    path: "./generated-host-keys/{{ hostname }}/id_rsa"
 
 - name: Set ssh host private and public keys variables
   set_fact:

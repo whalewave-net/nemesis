@@ -9,8 +9,8 @@
         hc_vault_token: "{{ vault_token }}"
         cloudflare_api_key: "{{ cloudflare_api_key }}"
         
-        public_key_file_name: "/home/vagrant/generated-host-keys/{{ item.split('.')[0] | lower }}/id_rsa.pub"
-        private_key_file_name: "/home/vagrant/generated-host-keys/{{ item.split('.')[0] | lower }}/id_rsa"
+        public_key_file_name: "./generated-host-keys/{{ item.split('.')[0] | lower }}/id_rsa.pub"
+        private_key_file_name: "./generated-host-keys/{{ item.split('.')[0] | lower }}/id_rsa"
 
       include_tasks: create_vultr_server.yml
       loop: "{{ groups['vultr_servers'] }}"
@@ -30,19 +30,6 @@
 
     - name: Gather facts for first time
       setup:
-
-    - name: Add the john user
-      user:
-        shell: /bin/bash
-        name: "john"
-        createhome: yes
-        state: present
-
-    - name: Add john public key
-      authorized_key:
-        user: "john"
-        state: present
-        key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCfEiEUYsNKVt2yTLNnjEOQ5Z8vpZYQHhTsz/uxCvNzT9BqCbl2uNjaZWeNq82BVYJvJyfEQEKR3FR0XIGVGYUEcoSyM/oFZ/BYCk9mFiXwUITrh2xQFi+1VVXV2GXeF9XPUGOqasmeGPYG89DlX+zpz+qhVM1FPPjmmprROLDnp+Ivj1V+SHyC4PuHS881eZ0Nniwqjjb/71zBzEjsjIlSXXquxtH9Citn+/csm7Pkd3zs8ECDj0u92XeE6D+N6ki3mBBk/2zrHZzMznb0SFu9C23fYush09uDd54WzjiyievfXMCq89kkVfRy9Xc7SVxn6Waz+YiWr3uF8kcp7ylv lisa-@LAPTOP-ECVB6QQ0"
 
     - name: Add motd
       template:
